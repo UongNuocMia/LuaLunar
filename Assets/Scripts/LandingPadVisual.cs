@@ -12,9 +12,5 @@ public class LandingPadVisual : MonoBehaviour
     {
         LandingPad landingPad = GetComponent<LandingPad>();
         scoreMultiplierTextMesh.text = "x" + landingPad.GetScoreMultiplier();
-
-    }
-    private void Start()
-    {
     }
 }

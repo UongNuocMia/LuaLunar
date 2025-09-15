@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class LanderVisual : MonoBehaviour
 {
+    [SerializeField] private GameObject landerExplosionVfx;
+
     [SerializeField] private ParticleSystem leftThrusterParticleSystem;
     [SerializeField] private ParticleSystem middleThrusterParticleSystem;
     [SerializeField] private ParticleSystem rightThrusterParticleSystem;
+
 
     private Lander lander;
 
@@ -18,10 +21,24 @@ public class LanderVisual : MonoBehaviour
         lander.OnLeftForce += Lander_OnLeftForce;
         lander.OnUpForce += Lander_OnUpForce;
         lander.OnBeforeForce += Lander_OnBeforeForce;
+        lander.OnLanded += Lander_OnLanded; ;
 
         SetEnabledThrusterParticleSystem(leftThrusterParticleSystem, false);
         SetEnabledThrusterParticleSystem(middleThrusterParticleSystem, false);
         SetEnabledThrusterParticleSystem(rightThrusterParticleSystem, false);
+    }
+
+    private void Lander_OnLanded(object sender, Lander.OnLandedEventArgs e)
+    {
+        switch (e.landingType)
+        {
+            case LandingType.WrongLandingArea:
+            case LandingType.TooSteepAngle:
+            case LandingType.TooFastLanding:
+                Instantiate(landerExplosionVfx, transform.position, Quaternion.identity);
+                gameObject.SetActive(false);
+                break;
+        }
     }
 
     private void Lander_OnBeforeForce(object sender, System.EventArgs e)
